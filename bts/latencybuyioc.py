@@ -15,11 +15,6 @@ class BuyIOC:
         trading_client = trading_client_init
         currency_pair = currency_pair_init
 
-        amount = 1
-        price  = 0.000005
-        base   = "eth"
-        quote  = "btc"
-
         marketdata_ws = websocket.WebSocketApp("wss://" + bitstamp_endpoint, on_open=on_open, on_message=on_message, on_error=on_error)
         marketdata_ws.run_forever(sslopt={'cert_reqs': ssl.CERT_NONE})
 
@@ -31,7 +26,6 @@ class BuyIOC:
         fail_buy_ioc_insufficient_size(price)
         time.sleep(1)
         fail_buy_ioc_insufficient_balance(price)
-        
 
 
 def on_open(ws):
@@ -49,7 +43,7 @@ def subscribe_marketdata(ws):
         }
     }
     subscription = json.dumps(params)
-    
+
     try:
         ws.send(subscription)
     except Exception as e:
@@ -58,7 +52,7 @@ def subscribe_marketdata(ws):
 
 def on_message(ws, data):
     data = json.loads(data)
-    
+
     try:
         BuyIOC.logtrade(data)
     except Exception as e:
